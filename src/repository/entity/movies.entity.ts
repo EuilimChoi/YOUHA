@@ -31,15 +31,15 @@ export class Movies extends BaseEntity {
     @Column()
     score: number
 
-    @OneToMany(() => Trailers, (trailer) => trailer.movie)
+    @OneToMany(() => Trailers, (trailer) => trailer.movie, { cascade: true })
     trailers: Trailers[];
 
-    @OneToMany(() => MoviesDirectors, (moviesDirectors) => moviesDirectors.movies)
+    @OneToMany(() => MoviesDirectors, (moviesDirectors) => moviesDirectors.movies, { cascade: true })
     directors: MoviesDirectors[];
 
-    @OneToMany(() => MoviesGenres, (moviesGenres) => moviesGenres.movies)
+    @OneToMany(() => MoviesGenres, (moviesGenres) => moviesGenres.movies, { cascade: true })
     genres: MoviesGenres[];
 
-    @OneToMany(() => MoviesActors, (moviesActors) => moviesActors.movies)
+    @OneToMany(() => MoviesActors, (moviesActors) => moviesActors.movies, { cascade: true })
     actors: MoviesActors[];
 }

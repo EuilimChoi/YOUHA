@@ -24,12 +24,12 @@ export class MovieController {
     }
 
     @Put('/:movieId')
-    async updateMovie(@Body() movieInfo: Movies, @Param() movieId: number): Promise<UpdateResult> {
+    async updateMovie(@Body() movieInfo: MovieInfoDTO, @Param('movieId') movieId: number): Promise<Movies> {
         return this.movieservice.updateMovie(movieInfo, movieId)
     }
 
     @Delete('/:movieId')
-    async deleteMovie(@Param() movieId: number): Promise<DeleteResult> {
+    async deleteMovie(@Param('movieId') movieId: number): Promise<DeleteResult> {
         return this.movieservice.deleteMovie(movieId)
     }
 

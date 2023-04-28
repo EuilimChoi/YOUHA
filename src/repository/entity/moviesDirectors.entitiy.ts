@@ -18,7 +18,9 @@ export class MoviesDirectors extends BaseEntity {
     @ManyToOne(() => Directors, (director) => director.moviesDirectors)
     directors: Directors
 
-    @ManyToOne(() => Movies, (movie) => movie.directors)
+    @ManyToOne(() => Movies, (movie) => movie.directors, {
+        onDelete: 'CASCADE', createForeignKeyConstraints: false,
+    })
     movies: Movies
 
     @Column()

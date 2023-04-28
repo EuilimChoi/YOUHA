@@ -12,6 +12,8 @@ export class Trailers extends BaseEntity {
     @Column()
     key: number
 
-    @ManyToOne(() => Movies, (movie) => movie.trailers)
+    @ManyToOne(() => Movies, (movie) => movie.trailers, {
+        onDelete: 'CASCADE', createForeignKeyConstraints: false,
+    })
     movie: Movies;
 }

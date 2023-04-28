@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movies } from './entity/movies.entity';
-import { DeleteResult, Repository, UpdateResult, Like, MoreThan, LessThan, Between, FindOptions, FindOptionsWhere } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult, Like, MoreThan, LessThan, Between, FindOptions, FindOptionsWhere, In } from 'typeorm';
 import { Actors } from './entity/actors.entity';
 import { Genres } from './entity/genres.entity';
 import { Trailers } from './entity/trailers.entity';
@@ -81,51 +81,101 @@ export class RepositoryService {
 
     async getMovie(movieId: number): Promise<Movies> {
         return await this.moviesRepository.findOne({
-            relations: ['trailers', 'moviesDirectors', 'moviesDirectors.directors', 'moivesGenres', 'moivesGenres.genres', 'moviesActors', 'moviesActors.actors'],
             where: {
                 id: movieId
-            }
+            },
+            relations: ['trailers', 'directors', 'directors.directors', 'genres', 'genres.genres', 'actors', 'actors.actors'],
         })
     }
 
 
-    async getMovieByQuery(query: Partial<QueryInfo>): Promise<Movies[]> {
-        console.log('여기로 들어옴')
+    async getMovieByQuery(query: Partial<QueryInfo>): Promise<any> {
         console.log(query)
+
+        const sortMovieList = (array: number[], count: number) => {
+            const counter = {};
+
+            for (const num of array) {
+                counter[num] = counter[num] ? counter[num] + 1 : 1;
+            }
+
+            const duplicates = [];
+            for (const num in counter) {
+                if (counter[num] >= count) {
+                    duplicates.push(Number(num));
+                }
+            }
+            return duplicates;
+        }
+
+
+        const genreMovieList = async (genres: string) => {
+            const genre = genres.split(',').map((genre) => ({ genre: genre }))
+            const getmovie = await this.moviesGenresRepository.find({ where: { genres: genre }, relations: ['movies'] },)
+            const movieList = getmovie.map((movie) => movie.movies.id)
+            const sortedMovieList = sortMovieList(movieList, genre.length)
+            return sortedMovieList
+        }
+
+        const actorMovieList = async (actors: string) => {
+            const actor = actors.split(',').map((actor) => ({ name: actor }))
+            const getmovie = await this.moviesActorsRepository.find({ where: { actors: actor }, relations: ['movies'] },)
+            const movieList = getmovie.map((movie) => movie.movies.id)
+            const sortedMovieList = sortMovieList(movieList, actor.length)
+            return sortedMovieList
+
+        }
+
+        const directorMovieList = async (directors: string) => {
+            const director = directors.split(',').map((director) => ({ name: director }))
+            const getmovie = await this.moviesDirectorsRepository.find({ where: { directors: director }, relations: ['movies'] },)
+            const movieList = getmovie.map((movie) => movie.movies.id)
+            const sortedMovieList = sortMovieList(movieList, director.length)
+            return sortedMovieList
+
+        }
+
+        const movieCondition = {
+            ...(query.genres && { genres: await genreMovieList(query.genres) }),
+            ...(query.actors && { actors: await actorMovieList(query.actors) }),
+            ...(query.directors && { directors: await directorMovieList(query.directors) }),
+        };
+
+        const checkEmpty = Object.keys(movieCondition).length !== 0;
+
+        const intersection = checkEmpty && Object.values(movieCondition).reduce((accumulator, current) =>
+            accumulator.filter(value => current.includes(value)))
+
         const whereCondition = {
-            ...(query.genres && { genres: query.genres.split(',').map((genre) => ({ genres: { genre } })) }),
-            ...(query.actors && { actors: query.actors.split(',').map((name) => ({ name: { name } })) }),
-            ...(query.directors && { directors: query.directors.split(',').map((name) => ({ name: { name } })) }),
+            ...(intersection && { id: In(intersection) }),
             ...(query.name && { name: Like(`%${query.name}%`) }),
             ...(query.startdate && { openingDate: MoreThan(new Date(query.startdate)) }),
             ...(query.enddate && { openingDate: LessThan(new Date(query.enddate)) }),
         };
 
-        console.log(whereCondition);
-        const genre1 = await this.genresRepository.findOne({ where: { genre: 'action' } })
-        console.log(genre1)
-
-        return await this.moviesRepository.find({
-            // where: whereCondition,
-            where: {
-                genres: { genres: { id: 2 } }
-            },
+        const movieId = await this.moviesRepository.find({
+            where: whereCondition,
             relations: ['trailers', 'directors', 'directors.directors', 'genres', 'genres.genres', 'actors', 'actors.actors'],
             skip: Number(query.skip) || 0,
             take: Number(query.take) || 10,
-        });
+        })
+
+        return movieId
+
     }
 
-
-
-    async updateMovieInfo(movieInfo: Movies, movieId: number): Promise<UpdateResult> {
-        return await this.moviesRepository.update(movieId, movieInfo)
+    async updateMovieInfo(movieInfo: MovieInfoDTO, movieId: number): Promise<Movies> {
+        await this.deleteMovieInfo(movieId)
+        return await this.createMovie(movieInfo)
     }
 
+    //
     async deleteMovieInfo(movieId: number): Promise<DeleteResult> {
+        console.log("movieId", movieId)
         return await this.moviesRepository.delete(movieId)
     }
 
+    //
     async createActor(actorInfo: string): Promise<Actors> {
         return await this.actorsRepository.save({ name: actorInfo })
     }

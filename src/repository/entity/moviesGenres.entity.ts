@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { Movies } from './movies.entity';
 import { Genres } from './genres.entity';
 
@@ -19,7 +19,9 @@ export class MoviesGenres extends BaseEntity {
     @ManyToOne(() => Genres, (genre) => genre.moviesGenre)
     genres: Genres;
 
-    @ManyToOne(() => Movies, (movie) => movie.genres)
+    @ManyToOne(() => Movies, (movie) => movie.genres, {
+        onDelete: 'CASCADE', createForeignKeyConstraints: false,
+    })
     movies: Movies
 
     @Column()

@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { Actors } from './actors.entity';
 import { Movies } from './movies.entity';
 
@@ -14,12 +14,15 @@ export class MoviesActors extends BaseEntity {
     @Column({ primary: true, generated: true })
     id: number;
 
-    @ManyToOne(() => Actors, (actor) => actor.id)
-    actors: Actors;
-
-    @ManyToOne(() => Movies, (movie) => movie.actors)
-    movies: Movies
 
     @Column()
     key: number
+
+    @ManyToOne(() => Actors, (actor) => actor.name)
+    actors: Actors;
+
+    @ManyToOne(() => Movies, (movie) => movie.actors, {
+        onDelete: 'CASCADE', createForeignKeyConstraints: false,
+    })
+    movies: Movies
 }

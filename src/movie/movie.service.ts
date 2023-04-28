@@ -24,7 +24,7 @@ export class MovieService {
         return this.repository.getMovie(movieId)
     }
 
-    async updateMovie(movieInfo: Movies, movieId: number): Promise<UpdateResult> {
+    async updateMovie(movieInfo: MovieInfoDTO, movieId: number): Promise<Movies> {
         return this.repository.updateMovieInfo(movieInfo, movieId)
     }
 

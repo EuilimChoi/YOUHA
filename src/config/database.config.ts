@@ -5,7 +5,7 @@ const dataBaseConfig: TypeOrmModuleOptions = {
     database: 'db.youha',
     autoLoadEntities: true,
     synchronize: true,
-    logging: true,
+    logging: false,
     extra: {
         dateStrings: true,
     }
