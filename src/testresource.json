@@ -1,0 +1,35 @@
+{
+    "name": "존윅4",
+    "originName": "john wick 4",
+    "openingDate": "2023-04-25",
+    "posterImage": "https://laksdnfa.asndlfknalsk.com",
+    "synopsis": "존윅이 아무나 다 죽이는 영화",
+    "playtime": "180분",
+    "score": 99,
+    "trailers": [
+        {
+            "url": "https://youtube.com/trailers",
+            "key": 1
+        },
+        {
+            "url": "https://youtube.com/trailers",
+            "key": 2
+        },
+        {
+            "url": "https://youtube.com/trailers",
+            "key": 3
+        }
+    ],
+    "directors": [
+        "john"
+    ],
+    "genres": [
+        "action",
+        "shooting"
+    ],
+    "actors": [
+        "키아누 리브스",
+        "견자단",
+        "빌 스카스가드"
+    ]
+}

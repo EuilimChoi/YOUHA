@@ -1,10 +1,9 @@
-
 import { BaseEntity } from 'src/repository/entity/base.entity'
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Trailers } from './trailers.entity';
-import { Directors } from './directors,entity';
-import { Genres } from './genres.entity';
-import { Actors } from './actors.entity';
+import { MoviesDirectors } from './moviesDirectors.entitiy';
+import { MoviesGenres } from './moviesGenres.entity';
+import { MoviesActors } from './moviesActors.entity';
 
 @Entity({ name: 'tb_movies' })
 export class Movies extends BaseEntity {
@@ -35,15 +34,12 @@ export class Movies extends BaseEntity {
     @OneToMany(() => Trailers, (trailer) => trailer.movie)
     trailers: Trailers[];
 
-    @ManyToMany(() => Directors)
-    @JoinTable({ name: 'movies_director' })
-    directors: Directors[];
+    @OneToMany(() => MoviesDirectors, (moviesDirectors) => moviesDirectors.movies)
+    directors: MoviesDirectors[];
 
-    @ManyToMany(() => Genres)
-    @JoinTable({ name: 'movies_genres' })
-    genres: Genres[];
+    @OneToMany(() => MoviesGenres, (moviesGenres) => moviesGenres.movies)
+    genres: MoviesGenres[];
 
-    @ManyToMany(() => Actors)
-    @JoinTable({ name: 'movies_actors' })
-    actors: Actors[];
+    @OneToMany(() => MoviesActors, (moviesActors) => moviesActors.movies)
+    actors: MoviesActors[];
 }

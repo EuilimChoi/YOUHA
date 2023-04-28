@@ -5,7 +5,12 @@ import { DeleteResult, Repository, UpdateResult, Like, MoreThan, LessThan, Betwe
 import { Actors } from './entity/actors.entity';
 import { Genres } from './entity/genres.entity';
 import { Trailers } from './entity/trailers.entity';
-import { Directors } from './entity/directors,entity';
+import { Directors } from './entity/directors.entity';
+import { MovieInfoDTO } from 'src/movie/interface/dto';
+import { plainToInstance } from "class-transformer";
+import { MoviesActors } from './entity/moviesActors.entity';
+import { MoviesGenres } from './entity/moviesGenres.entity';
+import { MoviesDirectors } from './entity/moviesDirectors.entitiy';
 
 @Injectable()
 export class RepositoryService {
@@ -20,11 +25,54 @@ export class RepositoryService {
         private trailersRepository: Repository<Trailers>,
         @InjectRepository(Directors)
         private directorsRepository: Repository<Directors>,
+        @InjectRepository(MoviesActors)
+        private moviesActorsRepository: Repository<MoviesActors>,
+        @InjectRepository(MoviesGenres)
+        private moviesGenresRepository: Repository<MoviesGenres>,
+        @InjectRepository(MoviesDirectors)
+        private moviesDirectorsRepository: Repository<MoviesDirectors>,
+
     ) { }
 
-    async createMovie(movieInfo: Partial<Movies>): Promise<Movies> {
+    async createMovie(movieInfo: MovieInfoDTO): Promise<Movies> {
         try {
-            return await this.moviesRepository.save(movieInfo)
+            const trailerList = await this.trailersRepository.save(movieInfo.trailers)
+
+            const movie = plainToInstance(Movies, movieInfo);
+            movie.trailers = trailerList
+
+            const savedMovieInfo = await this.moviesRepository.save(movie)
+
+            const actorList = await Promise.all(
+                movieInfo.actors.map(async (actorName, key) => {
+                    const actor = await this.getActor(actorName) || await this.createActor(actorName);
+                    const moviesActor = new MoviesActors(actor, savedMovieInfo, key + 1)
+                    return moviesActor
+                })
+            );
+
+            const directorList = await Promise.all(
+                movieInfo.directors.map(async (directorName, key) => {
+                    const director = await this.getDirector(directorName) || await this.createDirector(directorName)
+                    const moviesDirector = new MoviesDirectors(director, savedMovieInfo, key + 1)
+                    return moviesDirector
+                })
+            );
+
+            const genreList = await Promise.all(
+                movieInfo.genres.map(async (genreName, key) => {
+                    const genre = await this.getGenre(genreName) || await this.createGenre(genreName);
+                    const moivesGenre = new MoviesGenres(genre, savedMovieInfo, key + 1)
+                    return moivesGenre
+                })
+            );
+
+            await this.moviesActorsRepository.save(actorList)
+            await this.moviesDirectorsRepository.save(directorList)
+            await this.moviesGenresRepository.save(genreList)
+
+            return savedMovieInfo
+
         } catch (err) {
             console.error(err);
             throw new InternalServerErrorException();
@@ -32,58 +80,42 @@ export class RepositoryService {
     }
 
     async getMovie(movieId: number): Promise<Movies> {
-        return await this.moviesRepository.findOneOrFail({
-            relations: ['trailer', 'director', 'genres', 'actors'],
+        return await this.moviesRepository.findOne({
+            relations: ['trailers', 'moviesDirectors', 'moviesDirectors.directors', 'moivesGenres', 'moivesGenres.genres', 'moviesActors', 'moviesActors.actors'],
             where: {
                 id: movieId
             }
         })
     }
 
-    async getMovieList(): Promise<Movies[]> { //페이징 있어야함
-        return await this.moviesRepository.find()
-    }
 
     async getMovieByQuery(query: Partial<QueryInfo>): Promise<Movies[]> {
-        let paging = { skip: 0, take: 10 }
-        let whereCondition = {}
+        console.log('여기로 들어옴')
+        console.log(query)
+        const whereCondition = {
+            ...(query.genres && { genres: query.genres.split(',').map((genre) => ({ genres: { genre } })) }),
+            ...(query.actors && { actors: query.actors.split(',').map((name) => ({ name: { name } })) }),
+            ...(query.directors && { directors: query.directors.split(',').map((name) => ({ name: { name } })) }),
+            ...(query.name && { name: Like(`%${query.name}%`) }),
+            ...(query.startdate && { openingDate: MoreThan(new Date(query.startdate)) }),
+            ...(query.enddate && { openingDate: LessThan(new Date(query.enddate)) }),
+        };
 
-        for (const key in query) {
-            const makeList = query[key].split(',')
-            if (key === 'genres') {
-                whereCondition[key] = makeList.map((each: string) => { return { genre: each } })
-            } else if (key === 'skip') {
-                paging[key] = Number(query[key])
-            }
-            else if (key === 'take') {
-                paging[key] = Number(query[key])
-            }
-            else if (key === 'actors' || key === 'directors') {
-                whereCondition[key] = makeList.map((each: string) => { return { name: each } })
-            }
-            else if (key === 'name') {
-                whereCondition[key] = Like(`%${query[key]}%`)
-            }
-        }
-
-        if ('startdate' in query && 'enddate' in query) {
-            whereCondition['openingDate'] = Between(new Date(query.startdate), new Date(query.enddate))
-        } else if ('startdate' in query) {
-            whereCondition['openingDate'] = MoreThan(new Date(query.startdate))
-        } else if ('enddate' in query) {
-            whereCondition['openingDate'] = LessThan(new Date(query.enddate))
-        }
-
-        console.log(whereCondition)
-
-
+        console.log(whereCondition);
+        const genre1 = await this.genresRepository.findOne({ where: { genre: 'action' } })
+        console.log(genre1)
 
         return await this.moviesRepository.find({
-            ...paging,
-            relations: ['trailers', 'directors', 'genres', 'actors'],
-            where: whereCondition
-        })
-    } // 한번에 조회가 되는 로직을 생각해보자
+            // where: whereCondition,
+            where: {
+                genres: { genres: { id: 2 } }
+            },
+            relations: ['trailers', 'directors', 'directors.directors', 'genres', 'genres.genres', 'actors', 'actors.actors'],
+            skip: Number(query.skip) || 0,
+            take: Number(query.take) || 10,
+        });
+    }
+
 
 
     async updateMovieInfo(movieInfo: Movies, movieId: number): Promise<UpdateResult> {
@@ -99,7 +131,7 @@ export class RepositoryService {
     }
 
     async getActor(actorName: string): Promise<Actors> {
-        return await this.actorsRepository.findOneOrFail({ where: { name: actorName } })
+        return await this.actorsRepository.findOne({ where: { name: actorName } })
     }
 
     async createDirector(directorInfo: string): Promise<Directors> {
@@ -107,7 +139,7 @@ export class RepositoryService {
     }
 
     async getDirector(directorName: string): Promise<Directors> {
-        return await this.directorsRepository.findOneOrFail({ where: { name: directorName } })
+        return await this.directorsRepository.findOne({ where: { name: directorName } })
     }
 
     async createGenre(genres: string): Promise<Genres> {
@@ -115,6 +147,6 @@ export class RepositoryService {
     }
 
     async getGenre(genreName: string): Promise<Genres> {
-        return await this.genresRepository.findOneOrFail({ where: { genre: genreName } })
+        return await this.genresRepository.findOne({ where: { genre: genreName } })
     }
 }

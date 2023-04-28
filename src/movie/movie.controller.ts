@@ -19,7 +19,7 @@ export class MovieController {
     }
 
     @Get('/:movieId')
-    async getMovieDetail(@Param() movieId: number): Promise<Movies> {
+    async getMovieDetail(@Param('movieId') movieId: number): Promise<Movies> {
         return this.movieservice.getMovieDetail(movieId)
     }
 

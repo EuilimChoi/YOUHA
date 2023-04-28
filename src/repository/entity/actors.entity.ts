@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany } from 'typeorm';
+import { MoviesActors } from './moviesActors.entity';
 
 @Entity({ name: 'tb_actors' })
 export class Actors extends BaseEntity {
@@ -7,4 +8,7 @@ export class Actors extends BaseEntity {
 
     @Column()
     name: string;
+
+    @OneToMany(() => MoviesActors, (moviesActors) => moviesActors.actors)
+    MoviesGenre: MoviesActors[]
 }
