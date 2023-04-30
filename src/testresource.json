@@ -1,0 +1,305 @@
+[
+    {
+        "name": "Interstellar",
+        "originName": "Interstellar",
+        "posterImage": "https://example.com/poster.jpg",
+        "openingDate": "2014-11-07T00:00:00.000Z",
+        "synopsis": "In the future, governments and economies across the globe have collapsed, food is scarce, NASA is no more, and the 20th Century is to blame. A mysterious rip in spacetime opens and it's up to whatever is left of NASA to explore and offer up hope for mankind.",
+        "playtime": "169",
+        "score": 8.6,
+        "actors": [
+            "Matthew McConaughey",
+            "Anne Hathaway",
+            "Jessica Chastain",
+            "Michael Caine",
+            "Casey Affleck",
+            "Wes Bentley",
+            "Bill Irwin",
+            "Ellen Burstyn",
+            "Mackenzie Foy",
+            "Timothée Chalamet"
+        ],
+        "genres": [
+            "Adventure",
+            "Drama",
+            "Sci-Fi"
+        ],
+        "directors": [
+            "Christopher Nolan"
+        ],
+        "trailers": [
+            "https://example.com/trailer.mp4"
+        ]
+    },
+    {
+        "name": "The Dark Knight",
+        "originName": "The Dark Knight",
+        "posterImage": "https://example.com/poster.jpg",
+        "openingDate": "2008-07-18T00:00:00.000Z",
+        "synopsis": "Batman raises the stakes in his war on crime. With the help of Lieutenant Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the city streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.",
+        "playtime": "152",
+        "score": 9.0,
+        "actors": [
+            "Christian Bale",
+            "Heath Ledger",
+            "Aaron Eckhart",
+            "Michael Caine",
+            "Maggie Gyllenhaal",
+            "Gary Oldman",
+            "Morgan Freeman",
+            "Monique Gabriela Curnen",
+            "Ron Dean",
+            "Cillian Murphy"
+        ],
+        "genres": [
+            "Action",
+            "Crime",
+            "Drama"
+        ],
+        "directors": [
+            "Christopher Nolan"
+        ],
+        "trailers": [
+            "https://example.com/trailer.mp4"
+        ]
+    },
+    {
+        "name": "Avengers: Endgame",
+        "originName": "Avengers: Endgame",
+        "posterImage": "https://example.com/poster.jpg",
+        "openingDate": "2019-04-26T00:00:00.000Z",
+        "synopsis": "After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to undo Thanos' actions and restore order to the universe.",
+        "playtime": "181",
+        "score": 8.4,
+        "actors": [
+            "Robert Downey Jr.",
+            "Chris Evans",
+            "Mark Ruffalo",
+            "Chris Hemsworth",
+            "Scarlett Johansson",
+            "Jeremy Renner",
+            "Don Cheadle",
+            "Paul Rudd",
+            "Brie Larson",
+            "Karen Gillan",
+            "Danai Gurira",
+            "Benedict Wong",
+            "Jon Favreau",
+            "Bradley Cooper",
+            "Gwyneth Paltrow",
+            "Josh Brolin"
+        ],
+        "genres": [
+            "Action",
+            "Adventure",
+            "Drama"
+        ],
+        "directors": [
+            "Anthony Russo",
+            "Joe Russo"
+        ],
+        "trailers": [
+            "https://example.com/trailer1.mp4",
+            "https://example.com/trailer2.mp4"
+        ]
+    },
+    {
+        "name": "Joker",
+        "originName": "Joker",
+        "posterImage": "https://example.com/poster.jpg",
+        "openingDate": "2019-10-04T00:00:00.000Z",
+        "synopsis": "In Gotham City, mentally troubled comedian Arthur Fleck is disregarded and mistreated by society. He then embarks on a downward spiral of revolution and bloody crime. This path brings him face-to-face with his alter-ego: the Joker.",
+        "playtime": "122",
+        "score": 8.4,
+        "actors": [
+            "Joaquin Phoenix",
+            "Robert De Niro",
+            "Zazie Beetz",
+            "Frances Conroy",
+            "Brett Cullen",
+            "Shea Whigham",
+            "Bill Camp",
+            "Glenn Fleshler",
+            "Leigh Gill",
+            "Josh Pais",
+            "Rocco Luna",
+            "Marc Maron"
+        ],
+        "genres": [
+            "Crime",
+            "Drama",
+            "Thriller"
+        ],
+        "directors": [
+            "Todd Phillips"
+        ],
+        "trailers": [
+            "https://example.com/trailer1.mp4",
+            "https://example.com/trailer2.mp4"
+        ]
+    },
+    {
+        "name": "The Shawshank Redemption",
+        "originName": "The Shawshank Redemption",
+        "posterImage": "https://example.com/shawshank_redemption.jpg",
+        "openingDate": "1994-10-14T00:00:00.000Z",
+        "synopsis": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+        "playtime": "142",
+        "score": 9.3,
+        "actors": [
+            "Tim Robbins",
+            "Morgan Freeman",
+            "Bob Gunton"
+        ],
+        "genres": [
+            "Drama"
+        ],
+        "directors": [
+            "Frank Darabont"
+        ],
+        "trailers": [
+            "https://example.com/shawshank_redemption_trailer1.mp4",
+            "https://example.com/shawshank_redemption_trailer2.mp4"
+        ]
+    },
+    {
+        "name": "The Godfather",
+        "originName": "The Godfather",
+        "posterImage": "https://example.com/godfather.jpg",
+        "openingDate": "1972-03-24T00:00:00.000Z",
+        "synopsis": "An organized crime dynasty's aging patriarch transfers control of his clandestine empire to his reluctant son.",
+        "playtime": "175",
+        "score": 9.2,
+        "actors": [
+            "Marlon Brando",
+            "Al Pacino",
+            "James Caan",
+            "Richard S. Castellano",
+            "Robert Duvall",
+            "Sterling Hayden"
+        ],
+        "genres": [
+            "Crime",
+            "Drama"
+        ],
+        "directors": [
+            "Francis Ford Coppola"
+        ],
+        "trailers": [
+            "https://example.com/godfather_trailer1.mp4",
+            "https://example.com/godfather_trailer2.mp4"
+        ]
+    },
+    {
+        "name": "Parasite",
+        "originName": "Gisaengchung",
+        "posterImage": "https://example.com/parasite.jpg",
+        "openingDate": "2019-05-30T00:00:00.000Z",
+        "synopsis": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+        "playtime": "132",
+        "score": 8.6,
+        "actors": [
+            "Song Kang-ho",
+            "Lee Sun-kyun",
+            "Cho Yeo-jeong",
+            "Choi Woo-shik",
+            "Park So-dam"
+        ],
+        "genres": [
+            "Comedy",
+            "Drama",
+            "Thriller"
+        ],
+        "directors": [
+            "Bong Joon-ho"
+        ],
+        "trailers": [
+            "https://example.com/parasite-trailer.mp4"
+        ]
+    },
+    {
+        "name": "Schindler's List",
+        "originName": "Schindler's List",
+        "posterImage": "https://example.com/schindlers_list.jpg",
+        "openingDate": "1993-11-30T00:00:00.000Z",
+        "synopsis": "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.",
+        "playtime": "195",
+        "score": 8.9,
+        "actors": [
+            "Liam Neeson",
+            "Ben Kingsley",
+            "Ralph Fiennes"
+        ],
+        "genres": [
+            "Biography",
+            "Drama",
+            "History"
+        ],
+        "directors": [
+            "Steven Spielberg"
+        ],
+        "trailers": [
+            "https://example.com/schindlers_list_trailer.mp4"
+        ]
+    },
+    {
+        "name": "The Lord of the Rings: The Return of the King",
+        "originName": "The Lord of the Rings: The Return of the King",
+        "posterImage": "https://example.com/poster5.jpg",
+        "openingDate": "2003-12-17T00:00:00.000Z",
+        "synopsis": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+        "playtime": "201",
+        "score": 8.9,
+        "actors": [
+            "Elijah Wood",
+            "Viggo Mortensen",
+            "Ian McKellen",
+            "Orlando Bloom"
+        ],
+        "genres": [
+            "Action",
+            "Adventure",
+            "Drama"
+        ],
+        "directors": [
+            "Peter Jackson"
+        ],
+        "trailers": [
+            "https://example.com/trailer1.mp4",
+            "https://example.com/trailer2"
+        ]
+    },
+    {
+        "name": "John Wick",
+        "originName": "John Wick",
+        "posterImage": "https://example.com/johnwick.jpg",
+        "openingDate": "2014-10-24T00:00:00.000Z",
+        "synopsis": "After the sudden death of his beloved wife, John Wick receives one last gift from her, a beagle puppy named Daisy, and a note imploring him not to forget how to love. But John's mourning is interrupted when his 1969 Boss Mustang catches the eye of sadistic thug Iosef Tarasov who breaks into his house and steals it, beating John unconscious and leaving Daisy dead. Unwittingly, they have just reawakened one of the most brutal assassins the underworld has ever seen.",
+        "playtime": "101",
+        "score": 7.4,
+        "actors": [
+            "Keanu Reeves",
+            "Michael Nyqvist",
+            "Alfie Allen",
+            "Adrianne Palicki",
+            "Bridget Moynahan",
+            "Dean Winters",
+            "Ian McShane",
+            "John Leguizamo",
+            "Willem Dafoe"
+        ],
+        "genres": [
+            "Action",
+            "Thriller",
+            "Crime"
+        ],
+        "directors": [
+            "Chad Stahelski",
+            "David Leitch"
+        ],
+        "trailers": [
+            "https://example.com/johnwick-trailer1.mp4",
+            "https://example.com/johnwick-trailer2.mp4"
+        ]
+    }
+]
