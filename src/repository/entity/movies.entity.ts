@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/repository/entity/base.entity'
+import { BaseEntity } from './base.entity'
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Trailers } from './trailers.entity';
 import { MoviesDirectors } from './moviesDirectors.entitiy';

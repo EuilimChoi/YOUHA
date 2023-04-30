@@ -1,39 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { Genres } from 'src/repository/entity/genres.entity';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Movies } from 'src/repository/entity/movies.entity';
 import { RepositoryService } from 'src/repository/repository.service';
-import { DeleteResult, UpdateResult, getConnection } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { MovieInfoDTO } from './interface/dto';
-import { plainToInstance } from "class-transformer";
-import { Actors } from 'src/repository/entity/actors.entity';
-import { Directors } from 'src/repository/entity/directors.entity';
-import { Trailers } from 'src/repository/entity/trailers.entity';
+
 
 @Injectable()
 export class MovieService {
     constructor(private repository: RepositoryService,) { }
     async createMovie(movieInfo: MovieInfoDTO): Promise<Movies> {
-        return await this.repository.createMovie(movieInfo)
+        const movie = await this.repository.createMovie(movieInfo)
+        if (movie === "duplicate") throw new HttpException('duplicate', HttpStatus.CONFLICT)
+        return movie as Movies
     }
 
-    async getMovieByQuery(query: any): Promise<Movies[]> {
-        return this.repository.getMovieByQuery(query)
+    async getMovieByQuery(query: any): Promise<MovieInfoDTO[]> {
+        const movies = await this.repository.getMovieByQuery(query)
+        if (movies.length === 0) throw new HttpException('no content', HttpStatus.NO_CONTENT)
+        return movies
     }
 
-    async getMovieDetail(movieId: number): Promise<Movies> {
-        return this.repository.getMovie(movieId)
+    async getMovieDetail(movieId: number): Promise<MovieInfoDTO> {
+        const movie = await this.repository.getMovie(movieId)
+        if (!movie) throw new HttpException('no content', HttpStatus.NO_CONTENT)
+        return movie
     }
 
     async updateMovie(movieInfo: MovieInfoDTO, movieId: number): Promise<Movies> {
-        return this.repository.updateMovieInfo(movieInfo, movieId)
+        const movie = await this.repository.updateMovieInfo(movieInfo, movieId)
+        if (!movie) throw new HttpException('bad request', HttpStatus.BAD_REQUEST)
+        if (movie === 'duplicate') throw new HttpException('duplicate', HttpStatus.CONFLICT)
+        return movie as Movies
     }
 
-    async deleteMovie(movieId: number): Promise<DeleteResult> {
-        return this.repository.deleteMovieInfo(movieId)
+    async deleteMovie(movieId: number): Promise<string> {
+        const movie = await this.repository.deleteMovieInfo(movieId)
+        if (!movie) throw new HttpException('bad request', HttpStatus.BAD_REQUEST)
+        return movie
     }
-
-    async createGenre(genres: string): Promise<Genres> {
-        return this.repository.createGenre(genres)
-    }
-
 }

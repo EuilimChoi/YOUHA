@@ -11,6 +11,10 @@ import { Trailers } from 'src/repository/entity/trailers.entity';
 
 
 export class MovieInfoDTO {
+    @IsNumber()
+    @IsOptional()
+    id?: number
+
     @IsString()
     name: string
 
@@ -34,8 +38,8 @@ export class MovieInfoDTO {
 
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => Trailers)
-    trailers: Trailers[]
+    @Type(() => String)
+    trailers: string[]
 
     @IsArray()
     @ValidateNested({ each: true })

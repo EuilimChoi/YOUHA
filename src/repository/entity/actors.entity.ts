@@ -1,9 +1,10 @@
-import { BaseEntity, Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from './base.entity'
 import { MoviesActors } from './moviesActors.entity';
 
 @Entity({ name: 'tb_actors' })
 export class Actors extends BaseEntity {
-    @Column({ primary: true, generated: true })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column()

@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
 import { Movies } from './movies.entity';
 import { Directors } from './directors.entity';
 
@@ -12,7 +13,7 @@ export class MoviesDirectors extends BaseEntity {
         this.key = key
     }
 
-    @Column({ primary: true, generated: true })
+    @PrimaryGeneratedColumn()
     id: number;
 
     @ManyToOne(() => Directors, (director) => director.moviesDirectors)

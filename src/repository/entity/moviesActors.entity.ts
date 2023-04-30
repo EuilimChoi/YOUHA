@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from './base.entity';
 import { Actors } from './actors.entity';
 import { Movies } from './movies.entity';
 
@@ -11,7 +12,7 @@ export class MoviesActors extends BaseEntity {
         this.movies = movie
         this.key = key
     }
-    @Column({ primary: true, generated: true })
+    @PrimaryGeneratedColumn()
     id: number;
 
 

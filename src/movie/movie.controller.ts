@@ -1,8 +1,9 @@
-import { Controller, Post, Body, Query, Put, Param, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, Query, Put, Param, Delete, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Movies } from 'src/repository/entity/movies.entity';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { MovieInfoDTO } from './interface/dto';
+
 
 @Controller('/api/v1/movies')
 export class MovieController {
@@ -10,27 +11,31 @@ export class MovieController {
 
     @Post('/')
     async createMovie(@Body() movieInfo: MovieInfoDTO) {
-        return this.movieservice.createMovie(movieInfo)
+        return await this.movieservice.createMovie(movieInfo)
     }
 
     @Get()
-    async getMovieByQuery(@Query() query: Partial<QueryInfo>): Promise<Movies[]> {
-        return this.movieservice.getMovieByQuery(query)
+    async getMovieByQuery(@Query() query: Partial<QueryInfo>): Promise<MovieInfoDTO[]> {
+        return await this.movieservice.getMovieByQuery(query)
     }
 
     @Get('/:movieId')
-    async getMovieDetail(@Param('movieId') movieId: number): Promise<Movies> {
-        return this.movieservice.getMovieDetail(movieId)
+    async getMovieDetail(@Param('movieId') movieId: number): Promise<any> {
+        const response = await this.movieservice.getMovieDetail(movieId)
+        if (response == null) {
+            new HttpException('no content', HttpStatus.NO_CONTENT)
+        }
+        return response
     }
 
     @Put('/:movieId')
     async updateMovie(@Body() movieInfo: MovieInfoDTO, @Param('movieId') movieId: number): Promise<Movies> {
-        return this.movieservice.updateMovie(movieInfo, movieId)
+        return await this.movieservice.updateMovie(movieInfo, movieId)
     }
 
     @Delete('/:movieId')
-    async deleteMovie(@Param('movieId') movieId: number): Promise<DeleteResult> {
-        return this.movieservice.deleteMovie(movieId)
+    async deleteMovie(@Param('movieId') movieId: number): Promise<string> {
+        return await this.movieservice.deleteMovie(movieId)
     }
 
 }
