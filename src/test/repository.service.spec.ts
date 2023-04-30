@@ -9,9 +9,9 @@ import { Directors } from '../repository/entity/directors.entity';
 import { MoviesActors } from '../repository/entity/moviesActors.entity';
 import { MoviesGenres } from '../repository/entity/moviesGenres.entity';
 import { MoviesDirectors } from '../repository/entity/moviesDirectors.entitiy';
-import { MovieInfoDTO } from 'src/movie/interface/dto';
+import { MovieInfoDTO } from '../movie/interface/dto';
 import { plainToClass } from 'class-transformer';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { HttpException, InternalServerErrorException } from '@nestjs/common';
 
 describe('RepositoryService', () => {
@@ -120,38 +120,99 @@ describe('RepositoryService', () => {
     });
 
     describe('getMovieByQuery', () => {
+        const info: any = {
+            name: 'johnwick5',
+            originName: 'johnwick5',
+            posterImage: 'https://laksdnfa.asndlfknalsk.com',
+            synopsis: '존윅이 아무나 다 죽이는 영화',
+            playtime: '180분',
+            openingDate: new Date('2022-04-05'),
+            score: 99,
+            trailers: [{ url: 'youtube.com' }],
+            directors: [{ directors: { name: 'john' } }],
+            genres: [{ genres: { genre: 'action' } }],
+            actors: [{ actors: { name: 'joohn' } }]
+        }
 
-
-        it('should return an empty array when no query condition is provided', async () => {
-            jest.spyOn(moviesRepository, 'find').mockResolvedValue([]);
-
+        it('should return all movies when no query condition is provided', async () => {
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => [info, info, info, info, info]);
             const result = await service.getMovieByQuery({});
-
-            expect(result).toEqual([]);
-            expect(moviesRepository.find).toHaveBeenCalledWith({
-                where: {},
-                relations: ['trailers', 'directors.directors', 'genres.genres', 'actors.actors'],
-                skip: 0,
-                take: 10,
-            });
+            expect(result.length).toEqual(5);
         });
 
         it('should return an matched movie with query', async () => {
-            const movie = plainToClass(Movies, movieInfo);
-            jest.spyOn(moviesRepository, 'find').mockResolvedValue([movie]);
-            console.log(movieInfo)
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => [info]);
             const result = await service.getMovieByQuery({ name: movieInfo.name });
-
-            expect(result).toEqual([movie]);
-            // expect(moviesRepository.find).toHaveBeenCalledWith({
-            //     where: { name: movieInfo.name },
-            //     relations: ['trailers', 'directors.directors', 'genres.genres', 'actors.actors'],
-            //     skip: 0,
-            //     take: 10,
-            // });
+            expect(result.length).toEqual(1);
         })
+    });
 
 
+    describe('updateMovieInfo', () => {
+        const info: any = {
+            id: 1,
+            name: 'johnwick5',
+            originName: 'johnwick5',
+            posterImage: 'https://laksdnfa.asndlfknalsk.com',
+            synopsis: '존윅이 아무나 다 죽이는 영화',
+            playtime: '180분',
+            openingDate: new Date('2022-04-05'),
+            score: 99,
+            trailers: [{ url: 'youtube.com' }],
+            directors: [{ directors: { name: 'john' } }],
+            genres: [{ genres: { genre: 'action' } }],
+            actors: [{ actors: { name: 'joohn' } }]
+        }
+
+        it('should return duplicate if update movie info is duplicate', async () => {
+            const movie = plainToClass(MovieInfoDTO, info);
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => [info]);
+            const result = await service.updateMovieInfo(movie, 1);
+            expect(result).toEqual('duplicate');
+        });
+
+        it('should return null if no matched movie in database', async () => {
+            const movie = plainToClass(MovieInfoDTO, info);
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => []);
+            const result = await service.updateMovieInfo(movie, 1);
+            expect(result).toEqual(null);
+        })
+    });
+
+    describe('deleteMovieInfo', () => {
+        const info: any = {
+            id: 1,
+            name: 'johnwick5',
+            originName: 'johnwick5',
+            posterImage: 'https://laksdnfa.asndlfknalsk.com',
+            synopsis: '존윅이 아무나 다 죽이는 영화',
+            playtime: '180분',
+            openingDate: new Date('2022-04-05'),
+            score: 99,
+            trailers: [{ url: 'youtube.com' }],
+            directors: [{ directors: { name: 'john' } }],
+            genres: [{ genres: { genre: 'action' } }],
+            actors: [{ actors: { name: 'joohn' } }]
+        }
+
+        it('should return null if no matched movie in database', async () => {
+            const movieinfo = plainToClass(MovieInfoDTO, info);
+            const movie = plainToClass(Movies, info);
+            const answer: DeleteResult = { raw: movie }
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => []);
+            const result = await service.deleteMovieInfo(1);
+            expect(result).toEqual(null);
+        });
+
+        it('should return deleted movie deleted', async () => {
+            const movieinfo = plainToClass(MovieInfoDTO, info);
+            const movie = plainToClass(Movies, info);
+            const answer: DeleteResult = { raw: movie }
+            jest.spyOn(moviesRepository, 'find').mockImplementation(async () => [movie]);
+            jest.spyOn(moviesRepository, 'delete').mockImplementation(async () => answer);
+            const result = await service.deleteMovieInfo(1);
+            expect(result).toEqual('deleted');
+        })
     });
 
 

@@ -129,7 +129,6 @@ export class RepositoryService {
 
 
     async getMovieByQuery(query: Partial<QueryInfo>): Promise<MovieInfoDTO[]> {
-        console.log(query)
         try {
 
             const sortMovieList = (array: number[], count: number) => {
@@ -147,7 +146,6 @@ export class RepositoryService {
                 }
                 return duplicates;
             }
-
 
             const genreMovieList = async (genres: string) => {
                 const genre = genres.split(',').map((genre) => ({ genre: genre }))
@@ -187,12 +185,10 @@ export class RepositoryService {
 
             const whereCondition = {
                 ...(intersection && { id: In(intersection) }),
-                ...(query.name && { name: Like(`%${query.name}%`) }),
+                ...(query.name && { name: Like(`%${query.name.split(',')[0]}%`) }),
                 ...(query.startdate && { openingDate: MoreThan(new Date(query.startdate)) }),
                 ...(query.enddate && { openingDate: LessThan(new Date(query.enddate)) }),
             };
-
-            console.log(whereCondition)
 
             const movieId = await this.moviesRepository.find({
                 where: whereCondition,

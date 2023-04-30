@@ -3,17 +3,36 @@ import { MovieService } from './movie.service';
 import { Movies } from 'src/repository/entity/movies.entity';
 import { DeleteResult } from 'typeorm';
 import { MovieInfoDTO } from './interface/dto';
+import { ApiQuery } from '@nestjs/swagger';
 
 
 @Controller('/api/v1/movies')
 export class MovieController {
     constructor(private movieservice: MovieService) { }
 
-    @Post('/')
+    @Post()
     async createMovie(@Body() movieInfo: MovieInfoDTO) {
         return await this.movieservice.createMovie(movieInfo)
     }
 
+    @ApiQuery({
+        name: 'name'
+    })
+    @ApiQuery({
+        name: 'actors'
+    })
+    @ApiQuery({
+        name: 'directors'
+    })
+    @ApiQuery({
+        name: 'genres'
+    })
+    @ApiQuery({
+        name: 'startdate'
+    })
+    @ApiQuery({
+        name: 'enddate'
+    })
     @Get()
     async getMovieByQuery(@Query() query: Partial<QueryInfo>): Promise<MovieInfoDTO[]> {
         return await this.movieservice.getMovieByQuery(query)
