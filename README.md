@@ -130,8 +130,7 @@ A: 다음과 같은 json 형식을 따라 제작했습니다.
 - Sqlite
 - Typescript 
 
-## 구현 기능
-- 회원 기능
+## 구현 api
     - [x] GET /api/v1/movies
     - [x] GET /api/v1/movies/{movie_id}
     - [x] POST /api/v1/movies
